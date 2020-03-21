@@ -1,4 +1,4 @@
-from .Http import Injector
+from components.http.injector import Injector
 
 class AuthInjector(Injector):
 

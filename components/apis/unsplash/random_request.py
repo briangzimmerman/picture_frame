@@ -1,9 +1,9 @@
-from .Http import Request
-import UnsplashClient
+from components.http.request import Request
+from components.apis.unsplash.unsplash_client import UnsplashClient
 
 class RandomRequest(Request):
 
-    def __init__(self), query, featured, orientation, count):
+    def __init__(self, query, featured, orientation, count):
         super().__init__(UnsplashClient.BASE_URL + '/photos/random', 'get')
         self.params = {
             "query": query,

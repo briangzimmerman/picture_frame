@@ -1,5 +1,5 @@
-from .Http import Client
-import AuthInjector
+from components.http.client import Client
+from components.apis.unsplash.auth_injector import AuthInjector
 
 class UnsplashClient(Client):
     BASE_URL = 'https://api.unsplash.com'
