@@ -7,4 +7,5 @@ class AuthInjector(Injector):
         self.apiKey = apiKey
 
     def inject(self, request: Request) -> None:
-        request.addHeader('Authorization', 'Client-ID ' + self.apiKey)
+        if not request.hasHeader('Authorization'):
+            request.addHeader('Authorization', 'Client-ID ' + self.apiKey)

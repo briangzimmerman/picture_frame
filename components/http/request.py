@@ -11,3 +11,6 @@ class Request:
         self.headers[key] = value
 
         return self
+
+    def hasHeader(self, key: str) -> bool:
+        return key in self.headers

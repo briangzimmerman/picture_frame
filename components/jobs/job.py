@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from datetime import time, datetime
 
-class JobInterface(ABC):
+class Job(ABC):
     def __init__(
         self,
         start_hour: int,
@@ -13,7 +13,6 @@ class JobInterface(ABC):
         self._isStopping = False
         self._startTime  = time(start_hour, start_minute)
         self._endTime    = time(end_hour, end_minute)
-        self._isRunning  = False
 
     @abstractmethod
     async def start(self) -> None:

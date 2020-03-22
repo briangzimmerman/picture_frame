@@ -1,13 +1,13 @@
 import asyncio
 import time
 
-from components.jobs.job import JobInterface
+from components.jobs.job import Job
 from typing import List
 
 class JobManager:
     SLEEP_INTERVAL = 10
 
-    def __init__(self, jobs: List[JobInterface]):
+    def __init__(self, jobs: List[Job]):
         self._jobCollection = jobs
 
     def run(self) -> None:

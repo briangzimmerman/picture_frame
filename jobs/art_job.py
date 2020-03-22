@@ -2,11 +2,11 @@ import asyncio
 import json
 import time
 
-from components.jobs.job import JobInterface
+from components.jobs.job import Job
 from components.apis.unsplash.unsplash_client import UnsplashClient
 from components.apis.unsplash.random_request import RandomRequest
 
-class ArtJob(JobInterface):
+class ArtJob(Job):
     JOB_REPEAT_INTERVAL = 3600
 
     def __init__(
@@ -24,12 +24,16 @@ class ArtJob(JobInterface):
         self._isRunning = True
 
         while self.shouldBeRunning():
-            response     = self._unsplashClient.execute(
-                RandomRequest('art', True, 'portrait', 1)
-            )
-            responseData = json.loads(response.content)
-            print(responseData[0]['urls']['full'])
+            # artUrl = self._getArtUrl()
+            print('Getting Url')
 
             await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
 
         self._isRunning = False
+
+    # TODO handle error
+    def _getArtUrl(self) -> str:
+        response     = self._unsplashClient.execute(RandomRequest('art', True, 'portrait', 1))
+        responseData = json.loads(response.content)
+
+        return responseData[0]['urls']['full']
