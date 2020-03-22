@@ -2,6 +2,7 @@ import asyncio
 import time
 
 from components.jobs.job import Job
+from gui.main_window import MainWindow
 from typing import List
 
 class JobManager:

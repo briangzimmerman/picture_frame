@@ -8,10 +8,9 @@ class MainWindow(tk.Tk):
         tk.Tk.__init__(self)
         self.attributes('-fullscreen', True)
         self.bind(self.CLOSE_BUTTON, lambda e: self.destroy())
-        self.mainloop()
 
     @staticmethod
-    def get():
+    def get() -> 'MainWindow':
         if not MainWindow._window:
             MainWindow._window = MainWindow()
         
