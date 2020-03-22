@@ -1,0 +1,7 @@
+unsplash_api_key: &unsplash_api_key ""
+
+jobs:
+  - class_info: 
+        module: 'jobs.art_job'
+        class: 'ArtJob'
+        params: {"unplash_api_key": *unsplash_api_key}
