@@ -13,7 +13,7 @@ from PIL import Image, ImageTk, ImageOps
 from io import BytesIO
 
 class ArtJob(Job):
-    JOB_REPEAT_INTERVAL = 3600
+    JOB_REPEAT_INTERVAL = 3600 # 1 hour
 
     def __init__(
         self,
@@ -24,32 +24,28 @@ class ArtJob(Job):
         unplash_api_key: str
     ):
         super().__init__(start_hour, start_minute, end_hour, end_minute)
-        self._unsplashClient = UnsplashClient(unplash_api_key)
-        self._mainWindow     = MainWindow.get()
+        self._unsplashClient  = UnsplashClient(unplash_api_key)
+        self._mainWindow      = MainWindow.get()
+        self._backgroundLabel = None
 
     async def start(self) -> None:
         self._isRunning = True
 
         while self.shouldBeRunning():
-            artUrl = self._getArtUrl()
-
-            backgroundImage = self._getPhoto(artUrl)
-            backgroundLabel = tk.Label(self._mainWindow, image=backgroundImage)
-            backgroundLabel.place(x=0, y=0, relwidth=1, relheight=1)
-            backgroundLabel.pack()
-
+            self._setLabelImage(self._getPhoto(self._getArtUrl()))
             self._mainWindow.update()
-
             await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
+
+        self._destroyLabel()
 
         self._isRunning = False
 
     # TODO handle error
     def _getArtUrl(self) -> str:
-        response     = self._unsplashClient.execute(RandomRequest('art', True, 'portrait', 1))
+        response     = self._unsplashClient.execute(RandomRequest('art', True, 'landscape', 1))
         responseData = json.loads(response.content)
 
-        return responseData[0]['urls']['full']
+        return responseData[0]['urls']['regular']
 
     def _getPhoto(self, photo_url: str) -> ImageTk.PhotoImage:
         img_bytes = urlopen(photo_url).read()
@@ -65,3 +61,19 @@ class ArtJob(Job):
         )
 
         return ImageTk.PhotoImage(image)
+
+    def _destroyLabel(self) -> None:
+        if self._backgroundLabel:
+            self._backgroundLabel.destroy()
+            self._backgroundLabel = None
+
+    def _setLabelImage(self, bg_img: ImageTk.PhotoImage) -> None:
+        if self._backgroundLabel:
+            self._backgroundLabel.configure(image=bg_img)
+            self._backgroundLabel.image = bg_img
+        else:
+            self._backgroundLabel       = tk.Label(self._mainWindow, image=bg_img)
+            self._backgroundLabel.image = bg_img
+
+            self._backgroundLabel.place(x=0, y=0, relwidth=1, relheight=1)
+            self._backgroundLabel.pack()

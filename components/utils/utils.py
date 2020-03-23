@@ -10,7 +10,7 @@ def get_fitted_image_dimensions(
     fit_to_width: int,
     fit_to_height: int
 ) -> tuple:
-    fit_ratio      = fit_to_height / fit_to_height
+    fit_ratio      = fit_to_width / fit_to_height
     original_ratio = original_width / original_height
 
     if fit_ratio > original_ratio:
