@@ -14,6 +14,7 @@ from io import BytesIO
 
 class ArtJob(Job):
     JOB_REPEAT_INTERVAL = 3600 # 1 hour
+    COLLECTIONS         = ['9387510', '9555007', '1336169', '5057079']
 
     def __init__(
         self,
@@ -26,13 +27,14 @@ class ArtJob(Job):
         super().__init__(start_hour, start_minute, end_hour, end_minute)
         self._unsplashClient  = UnsplashClient(unplash_api_key)
         self._mainWindow      = MainWindow.get()
-        self._backgroundLabel = None
+        self._photoImage      = None
+        self._backgroundImage = None
 
     async def start(self) -> None:
         self._isRunning = True
 
         while self.shouldBeRunning():
-            self._setLabelImage(self._getPhoto(self._getArtUrl()))
+            self._setImage(self._getPhoto(self._getArtUrl()))
             self._mainWindow.update()
             await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
 
@@ -42,38 +44,36 @@ class ArtJob(Job):
 
     # TODO handle error
     def _getArtUrl(self) -> str:
-        response     = self._unsplashClient.execute(RandomRequest('art', True, 'landscape', 1))
-        responseData = json.loads(response.content)
+        # TODO remove
+        return 'https://cdn.mos.cms.futurecdn.net/jbCNvTM4gwr2qV8X8fW3ZB.png'
+        
+        # response     = self._unsplashClient.execute(RandomRequest(False, 'landscape', 1, collections=self.COLLECTIONS))
+        # responseData = json.loads(response.content)
 
-        return responseData[0]['urls']['regular']
+        # return responseData[0]['urls']['regular']
 
     def _getPhoto(self, photo_url: str) -> ImageTk.PhotoImage:
         img_bytes = urlopen(photo_url).read()
         image     = Image.open(BytesIO(img_bytes))
         image     = ImageOps.fit(
             image,
-            get_fitted_image_dimensions(
-                image.size[0],
-                image.size[1],
-                self._mainWindow.winfo_screenwidth(),
-                self._mainWindow.winfo_screenheight()
-            )
+            (self._mainWindow.winfo_screenwidth(), self._mainWindow.winfo_screenheight())
         )
 
         return ImageTk.PhotoImage(image)
 
     def _destroyLabel(self) -> None:
-        if self._backgroundLabel:
-            self._backgroundLabel.destroy()
-            self._backgroundLabel = None
+        if self._backgroundImage:
+            self._mainWindow.canvas.delete(self._backgroundImage)
+            self._backgroundImage = None
+            self._photoImage      = None
 
-    def _setLabelImage(self, bg_img: ImageTk.PhotoImage) -> None:
-        if self._backgroundLabel:
-            self._backgroundLabel.configure(image=bg_img)
-            self._backgroundLabel.image = bg_img
+    def _setImage(self, bg_img: ImageTk.PhotoImage) -> None:
+        if not self._backgroundImage:
+            self._backgroundImage = self._mainWindow.canvas.create_image(0, 0, anchor=tk.NW, image=bg_img)
         else:
-            self._backgroundLabel       = tk.Label(self._mainWindow, image=bg_img)
-            self._backgroundLabel.image = bg_img
+            self._mainWindow.canvas.itemconfigure(self._backgroundImage, image=bg_img)
+            self._mainWindow.canvas.tag_lower(self._backgroundImage)
 
-            self._backgroundLabel.place(x=0, y=0, relwidth=1, relheight=1)
-            self._backgroundLabel.pack()
+        self._photoImage = bg_img # keep image from being garbage collected
+        

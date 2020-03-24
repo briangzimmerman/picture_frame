@@ -2,6 +2,21 @@ unsplash_api_key: &unsplash_api_key ""
 
 jobs:
   - class_info: 
-        module: 'jobs.art_job'
-        class: 'ArtJob'
-        params: {"unplash_api_key": *unsplash_api_key}
+      module: 'jobs.art_job'
+      class: 'ArtJob'
+      params: {
+        "start_hour": 0,
+        "start_minute": 0,
+        "end_hour": 23,
+        "end_minute": 59,
+        "unplash_api_key": *unsplash_api_key
+      }
+  - class_info:
+      module: 'jobs.clock_job'
+      class: 'ClockJob'
+      params: {
+        'start_hour': 0,
+        'start_minute': 0,
+        'end_hour': 23,
+        'end_minute': 59
+      }
