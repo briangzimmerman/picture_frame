@@ -16,8 +16,8 @@ class ClockJob(Job):
         self._text       = None
         self._stroke     = None
         self._mainWindow = MainWindow.get()
-        self._x          = self._mainWindow.winfo_screenwidth() - 85
-        self._y          = self._mainWindow.winfo_screenheight() - 25
+        self._x          = self._mainWindow.winfo_screenwidth() - 75
+        self._y          = self._mainWindow.winfo_screenheight() - 30
 
     async def start(self) -> None:
         self._isRunning = True
@@ -56,7 +56,7 @@ class ClockJob(Job):
             self._stroke = self._mainWindow.canvas.create_text(
                 self._x,
                 self._y,
-                font=(self.FONT, self.FONT_SIZE, 'bold'),
+                font=(self.FONT, self.FONT_SIZE + 1, 'bold'),
                 fill=self.STROKE_COLOR
             )
 

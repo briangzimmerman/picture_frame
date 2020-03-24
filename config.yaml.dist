@@ -1,5 +1,7 @@
 unsplash_api_key: &unsplash_api_key ""
 
+cta_train_api_key: &cta_train_api_key ""
+
 jobs:
   - class_info: 
       module: 'jobs.art_job'
@@ -19,4 +21,15 @@ jobs:
         'start_minute': 0,
         'end_hour': 23,
         'end_minute': 59
+      }
+  - class_info:
+      module: 'jobs.cta_train_arrival'
+      class: 'CtaTrainArrival'
+      params: {
+        'start_hour': 0,
+        'start_minute': 0,
+        'end_hour': 23,
+        'end_minute': 59,
+        'cta_train_api_key': *cta_train_api_key,
+        'stop_id': 30017
       }

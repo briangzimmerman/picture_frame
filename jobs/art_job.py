@@ -1,6 +1,5 @@
 import asyncio
 import json
-import time
 import tkinter as tk
 
 from components.jobs.job import Job
