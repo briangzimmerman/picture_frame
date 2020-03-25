@@ -6,6 +6,7 @@ from components.jobs.job import Job
 from components.apis.cta_trains.cta_train_client import CtaTrainClient
 from components.apis.cta_trains.arrival_request import ArrivalRequest
 from gui.main_window import MainWindow
+from datetime import datetime
 
 class CtaTrainArrival(Job):
     JOB_REPEAT_INTERVAL = 60
@@ -13,6 +14,7 @@ class CtaTrainArrival(Job):
     TEXT_COLOR          = 'white'
     FONT                = 'calibri'
     FONT_SIZE           = 40
+    TIME_FORMAT         = '%Y-%m-%dT%H:%M:%S' # 2020-03-24T20:26:57
 
     def __init__(
         self,
@@ -50,11 +52,14 @@ class CtaTrainArrival(Job):
 
         self._isRunning = False
 
-    def _getNextArrivalMinutes(self):
-        # response     = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id))
-        # responseData = json.loads(response.content)
+    def _getNextArrivalMinutes(self) -> int:
+        response     = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id))
+        responseData = json.loads(response.content)
+        arrivesAt    = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
+        now          = datetime.now()
+        seconds      = (arrivesAt - now).total_seconds()
 
-        return 5 #TODO make this work
+        return round(seconds / 60)
 
     def _setText(self, text: str) -> None:
         self._mainWindow.canvas.itemconfigure(self._getStroke(), text=text)

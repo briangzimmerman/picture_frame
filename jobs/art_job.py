@@ -21,11 +21,13 @@ class ArtJob(Job):
         start_minute: int,
         end_hour: int,
         end_minute: int,
-        unplash_api_key: str
+        unplash_api_key: str,
+        orientation: str
     ):
         super().__init__(start_hour, start_minute, end_hour, end_minute)
         self._unsplashClient  = UnsplashClient(unplash_api_key)
         self._mainWindow      = MainWindow.get()
+        self._orientation     = orientation
         self._photoImage      = None
         self._backgroundImage = None
 
@@ -44,12 +46,12 @@ class ArtJob(Job):
     # TODO handle error
     def _getArtUrl(self) -> str:
         # TODO remove
-        return 'https://cdn.mos.cms.futurecdn.net/jbCNvTM4gwr2qV8X8fW3ZB.png'
+        # return 'https://cdn.mos.cms.futurecdn.net/jbCNvTM4gwr2qV8X8fW3ZB.png'
         
-        # response     = self._unsplashClient.execute(RandomRequest(False, 'landscape', 1, collections=self.COLLECTIONS))
-        # responseData = json.loads(response.content)
+        response     = self._unsplashClient.execute(RandomRequest(False, self._orientation, 1, collections=self.COLLECTIONS))
+        responseData = json.loads(response.content)
 
-        # return responseData[0]['urls']['regular']
+        return responseData[0]['urls']['full']
 
     def _getPhoto(self, photo_url: str) -> ImageTk.PhotoImage:
         img_bytes = urlopen(photo_url).read()

@@ -11,7 +11,8 @@ jobs:
         "start_minute": 0,
         "end_hour": 23,
         "end_minute": 59,
-        "unplash_api_key": *unsplash_api_key
+        "unplash_api_key": *unsplash_api_key,
+        "orientation": "landscape"
       }
   - class_info:
       module: 'jobs.clock_job'
