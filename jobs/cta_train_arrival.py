@@ -30,7 +30,7 @@ class CtaTrainArrival(Job):
         self._mainWindow     = MainWindow.get()
         self._stop_id        = stop_id
         self._text           = None
-        self._stroke         = None
+        self._stroke         = []
         self._x              = self._mainWindow.winfo_screenwidth() - 275
         self._y              = 40
 
@@ -62,7 +62,9 @@ class CtaTrainArrival(Job):
         return round(seconds / 60)
 
     def _setText(self, text: str) -> None:
-        self._mainWindow.canvas.itemconfigure(self._getStroke(), text=text)
+        for stroke in self._getStroke():
+            self._mainWindow.canvas.itemconfigure(stroke, text=text)
+
         self._mainWindow.canvas.itemconfigure(self._getText(), text=text)
 
     def _getText(self):
@@ -77,13 +79,12 @@ class CtaTrainArrival(Job):
         return self._text
 
     def _getStroke(self):
-        if not self._stroke:
-            self._stroke = self._mainWindow.canvas.create_text(
-                self._x,
-                self._y,
-                font=(self.FONT, self.FONT_SIZE, 'bold'),
-                fill=self.STROKE_COLOR
-            )
+        if not len(self._stroke):
+            font = (self.FONT, self.FONT_SIZE)
+            self._stroke.append(self._mainWindow.canvas.create_text(self._x - 2, self._y, font=font, fill=self.STROKE_COLOR))
+            self._stroke.append(self._mainWindow.canvas.create_text(self._x, self._y - 2, font=font, fill=self.STROKE_COLOR))
+            self._stroke.append(self._mainWindow.canvas.create_text(self._x + 2, self._y, font=font, fill=self.STROKE_COLOR))
+            self._stroke.append(self._mainWindow.canvas.create_text(self._x, self._y + 2, font=font, fill=self.STROKE_COLOR))
 
         return self._stroke
     
@@ -92,6 +93,7 @@ class CtaTrainArrival(Job):
             self._mainWindow.canvas.delete(self._text)
             self._text = None
 
-        if self._stroke:
-            self._mainWindow.canvas.delete(self._stroke)
-            self._stroke = None
+        for stroke in self._stroke:
+            self._mainWindow.canvas.delete(stroke)
+
+        self._stroke = []
