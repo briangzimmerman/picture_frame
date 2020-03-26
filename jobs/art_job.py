@@ -24,7 +24,8 @@ class ArtJob(Job):
         end_hour: int,
         end_minute: int,
         unplash_api_key: str,
-        orientation: str
+        orientation: str,
+        unsplash_collections: list
     ):
         super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute)
         self._unsplashClient  = UnsplashClient(unplash_api_key)
@@ -32,6 +33,7 @@ class ArtJob(Job):
         self._orientation     = orientation
         self._photoImage      = None
         self._backgroundImage = None
+        self._collections     = unsplash_collections
 
     async def start(self) -> None:
         self._isRunning = True
@@ -47,7 +49,7 @@ class ArtJob(Job):
 
     # TODO handle error
     def _getArtUrl(self) -> str:
-        response     = self._unsplashClient.execute(RandomRequest(False, self._orientation, 1, collections=self.COLLECTIONS))
+        response     = self._unsplashClient.execute(RandomRequest(False, self._orientation, 1, collections=self._collections))
         responseData = json.loads(response.content)
 
         return responseData[0]['urls']['full']
