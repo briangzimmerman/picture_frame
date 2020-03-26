@@ -40,12 +40,8 @@ class CtaTrainArrival(Job):
         self._isRunning = True
 
         while self.shouldBeRunning():
-            arrives_in = self._getNextArrivalMinutes()
-            text       = 'Next train in ' + str(arrives_in) + ' minute'
-
-            if arrives_in > 1: text = text + 's'
+            self._setText('Trains in ' + self._getArrivalsMinutes() + ' minutes')
             
-            self._setText(text)
             self._mainWindow.update()
 
             await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
@@ -54,14 +50,23 @@ class CtaTrainArrival(Job):
 
         self._isRunning = False
 
-    def _getNextArrivalMinutes(self) -> int:
-        response     = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id))
+    def _getArrivalsMinutes(self) -> str:
+        response     = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id, 2))
         responseData = json.loads(response.content)
-        arrivesAt    = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
-        now          = datetime.now()
-        seconds      = (arrivesAt - now).total_seconds()
 
-        return round(seconds / 60)
+        firstTrainArrivesAt  = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
+        secondTrainArrivesAt = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
+
+        now                    = datetime.now()
+        secondsTillFirstTrain  = (firstTrainArrivesAt - now).total_seconds()
+        secondsTillSecondTrain = (secondTrainArrivesAt - now).total_seconds()
+
+        minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
+        if not minutesTillFirstTrain: minutesTillFirstTrain = '<1'
+
+        minutesTillSecondTrain = round(secondsTillSecondTrain / 60)
+
+        return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
 
     def _setText(self, text: str) -> None:
         for stroke in self._getStroke():
