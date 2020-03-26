@@ -7,30 +7,33 @@ jobs:
       module: 'jobs.art_job'
       class: 'ArtJob'
       params: {
-        "start_hour": 0,
-        "start_minute": 0,
-        "end_hour": 23,
-        "end_minute": 59,
-        "unplash_api_key": *unsplash_api_key,
-        "orientation": "landscape"
+        'days_to_run': [0, 1, 2, 3, 4, 5, 6],
+        'start_hour': 0,
+        'start_minute': 0,
+        'end_hour': 23,
+        'end_minute': 59,
+        'unplash_api_key': *unsplash_api_key,
+        'orientation': 'landscape'
       }
   - class_info:
       module: 'jobs.clock_job'
       class: 'ClockJob'
       params: {
-        'start_hour': 0,
-        'start_minute': 0,
-        'end_hour': 23,
-        'end_minute': 59
+        'days_to_run': [0, 1, 2, 3, 4],
+        'start_hour': 7,
+        'start_minute': 00,
+        'end_hour': 8,
+        'end_minute': 30
       }
   - class_info:
       module: 'jobs.cta_train_arrival'
       class: 'CtaTrainArrival'
       params: {
-        'start_hour': 0,
-        'start_minute': 0,
-        'end_hour': 23,
-        'end_minute': 59,
+        'days_to_run': [0, 1, 2, 3, 4],
+        'start_hour': 7,
+        'start_minute': 30,
+        'end_hour': 8,
+        'end_minute': 30,
         'cta_train_api_key': *cta_train_api_key,
         'stop_id': 30017
       }

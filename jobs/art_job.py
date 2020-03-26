@@ -10,6 +10,7 @@ from gui.main_window import MainWindow
 from urllib.request import urlopen
 from PIL import Image, ImageTk, ImageOps
 from io import BytesIO
+from typing import List
 
 class ArtJob(Job):
     JOB_REPEAT_INTERVAL = 3600 # 1 hour
@@ -17,6 +18,7 @@ class ArtJob(Job):
 
     def __init__(
         self,
+        days_to_run: List[int],
         start_hour: int,
         start_minute: int,
         end_hour: int,
@@ -24,7 +26,7 @@ class ArtJob(Job):
         unplash_api_key: str,
         orientation: str
     ):
-        super().__init__(start_hour, start_minute, end_hour, end_minute)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute)
         self._unsplashClient  = UnsplashClient(unplash_api_key)
         self._mainWindow      = MainWindow.get()
         self._orientation     = orientation
@@ -45,9 +47,6 @@ class ArtJob(Job):
 
     # TODO handle error
     def _getArtUrl(self) -> str:
-        # TODO remove
-        # return 'https://cdn.mos.cms.futurecdn.net/jbCNvTM4gwr2qV8X8fW3ZB.png'
-        
         response     = self._unsplashClient.execute(RandomRequest(False, self._orientation, 1, collections=self.COLLECTIONS))
         responseData = json.loads(response.content)
 

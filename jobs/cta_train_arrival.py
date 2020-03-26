@@ -7,6 +7,7 @@ from components.apis.cta_trains.cta_train_client import CtaTrainClient
 from components.apis.cta_trains.arrival_request import ArrivalRequest
 from gui.main_window import MainWindow
 from datetime import datetime
+from typing import List
 
 class CtaTrainArrival(Job):
     JOB_REPEAT_INTERVAL = 60
@@ -18,6 +19,7 @@ class CtaTrainArrival(Job):
 
     def __init__(
         self,
+        days_to_run: List[int],
         start_hour: int,
         start_minute: int,
         end_hour: int,
@@ -25,7 +27,7 @@ class CtaTrainArrival(Job):
         cta_train_api_key: str,
         stop_id: int
     ):
-        super().__init__(start_hour, start_minute, end_hour, end_minute)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute)
         self._ctaTrainClient = CtaTrainClient(cta_train_api_key)
         self._mainWindow     = MainWindow.get()
         self._stop_id        = stop_id

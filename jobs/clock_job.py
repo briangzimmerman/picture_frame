@@ -4,6 +4,7 @@ import tkinter as tk
 from components.jobs.job import Job
 from gui.main_window import MainWindow
 from datetime import datetime
+from typing import List
 
 class ClockJob(Job):
     STROKE_COLOR = 'black'
@@ -11,8 +12,8 @@ class ClockJob(Job):
     FONT         = 'calibri'
     FONT_SIZE    = 40
 
-    def __init__(self, start_hour: int, start_minute: int, end_hour: int, end_minute: int):
-        super().__init__(start_hour, start_minute, end_hour, end_minute)
+    def __init__(self, days_to_run: List[int], start_hour: int, start_minute: int, end_hour: int, end_minute: int):
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute)
         self._text       = None
         self._stroke     = []
         self._mainWindow = MainWindow.get()
