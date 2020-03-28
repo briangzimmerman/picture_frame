@@ -1,7 +1,7 @@
 class Request:
     
     def __init__(self, url: str, verb: str):
-        self.params  = None
+        self.params  = {}
         self.verb    = verb
         self.headers = {}
         self.json    = None

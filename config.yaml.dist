@@ -2,6 +2,10 @@ unsplash_api_key: &unsplash_api_key ""
 
 cta_train_api_key: &cta_train_api_key ""
 
+ipstack_api_key: &ipstack_api_key ""
+
+openweather_api_key: &openweather_api_key ""
+
 jobs:
   - class_info: 
       module: 'jobs.art_job'
@@ -37,4 +41,16 @@ jobs:
         'end_minute': 30,
         'cta_train_api_key': *cta_train_api_key,
         'stop_id': 30017
+      }
+  - class_info:
+      module: 'jobs.weather_job'
+      class: 'WeatherJob'
+      params: {
+        'days_to_run': [0, 1, 2, 3, 4],
+        'start_hour': 7,
+        'start_minute': 30,
+        'end_hour': 8,
+        'end_minute': 30,
+        'ipstack_api_key': *ipstack_api_key,
+        'openweather_api_key': *openweather_api_key
       }
