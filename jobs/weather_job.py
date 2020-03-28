@@ -5,6 +5,7 @@ from components.apis.ipstack.ip_stack_client import IpStackClient
 from components.apis.ipstack.check_request import CheckRequest
 from gui.main_window import MainWindow
 from typing import List
+from datetime import datetime
 
 import json
 import asyncio
@@ -40,11 +41,14 @@ class WeatherJob(TextJob):
         self._isRunning = True
 
         while self.shouldBeRunning():
-            self._setText(str(self._getTemperature()) + '\u00b0')
+            if not self._shouldRunAgain(self.JOB_REPEAT_INTERVAL):
+                await asyncio.sleep(self.JOB_PING_INTERVAL)
+                continue
 
+            self._setText(str(self._getTemperature()) + '\u00b0')
             self._mainWindow.update()
 
-            await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
+            self._lastRun = datetime.now()
 
         self._destroy()
 

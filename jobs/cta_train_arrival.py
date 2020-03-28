@@ -36,11 +36,14 @@ class CtaTrainArrival(TextJob):
         self._isRunning = True
 
         while self.shouldBeRunning():
-            self._setText('Trains in ' + self._getArrivalsMinutes() + ' minutes')
-            
-            self._mainWindow.update()
+            if not self._shouldRunAgain(self.JOB_REPEAT_INTERVAL):
+                await asyncio.sleep(self.JOB_PING_INTERVAL)
+                continue
 
-            await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
+            self._setText('Trains in ' + self._getArrivalsMinutes() + ' minutes')
+            self._mainWindow.update()
+            
+            self._lastRun = datetime.now()
 
         self._destroy()
 

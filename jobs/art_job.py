@@ -11,6 +11,7 @@ from urllib.request import urlopen
 from PIL import Image, ImageTk, ImageOps
 from io import BytesIO
 from typing import List
+from datetime import datetime
 
 class ArtJob(Job):
     JOB_REPEAT_INTERVAL = 3600 # 1 hour
@@ -39,11 +40,15 @@ class ArtJob(Job):
         self._isRunning = True
 
         while self.shouldBeRunning():
+            if not self._shouldRunAgain(self.JOB_REPEAT_INTERVAL):
+                await asyncio.sleep(self.JOB_PING_INTERVAL)
+                continue
+
             self._setImage(self._getPhoto(self._getArtUrl()))
             self._mainWindow.update()
-            await asyncio.sleep(self.JOB_REPEAT_INTERVAL)
+            self._lastRun = datetime.now()
 
-        self._destroyLabel()
+        self._destroy()
 
         self._isRunning = False
 
@@ -64,7 +69,7 @@ class ArtJob(Job):
 
         return ImageTk.PhotoImage(image)
 
-    def _destroyLabel(self) -> None:
+    def _destroy(self) -> None:
         if self._backgroundImage:
             self._mainWindow.canvas.delete(self._backgroundImage)
             self._backgroundImage = None

@@ -3,6 +3,8 @@ from datetime import time, datetime
 from typing import List
 
 class Job(ABC):
+    JOB_PING_INTERVAL = 10
+
     def __init__(
         self,
         days_to_run: List[int], # 0 (Monday) though 6 (Sunday)
@@ -15,6 +17,7 @@ class Job(ABC):
         self._days_to_run = days_to_run
         self._startTime   = time(start_hour, start_minute)
         self._endTime     = time(end_hour, end_minute)
+        self._lastRun     = None
 
     @abstractmethod
     async def start(self) -> None:
@@ -29,3 +32,6 @@ class Job(ABC):
         now = time(datetime.now().hour, datetime.now().minute)
 
         return self._startTime <= now < self._endTime
+
+    def _shouldRunAgain(self, job_repeat_interval: int) -> bool:
+        return not self._lastRun or (datetime.now() - self._lastRun).total_seconds() >= job_repeat_interval

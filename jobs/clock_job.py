@@ -19,11 +19,7 @@ class ClockJob(TextJob):
         self._isRunning = True
 
         while self.shouldBeRunning():
-            now  = datetime.now()
-            time = now.strftime('%-I:%M')
-            
-            self._setText(time)
-
+            self._setText(datetime.now().strftime('%-I:%M'))
             self._mainWindow.update()
 
             await asyncio.sleep(1)
