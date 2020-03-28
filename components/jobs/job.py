@@ -3,7 +3,7 @@ from datetime import time, datetime
 from typing import List
 
 class Job(ABC):
-    JOB_PING_INTERVAL = 10
+    JOB_PING_INTERVAL = 30
 
     def __init__(
         self,
