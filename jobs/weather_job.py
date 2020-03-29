@@ -1,8 +1,6 @@
 from components.jobs.text_job import TextJob
 from components.apis.openweather.openweather_client import OpenweatherClient
 from components.apis.openweather.weather_request import WeatherRequest
-from components.apis.ipstack.ip_stack_client import IpStackClient
-from components.apis.ipstack.check_request import CheckRequest
 from gui.main_window import MainWindow
 from typing import List
 from datetime import datetime
@@ -20,7 +18,7 @@ class WeatherJob(TextJob):
         start_minute: int,
         end_hour: int,
         end_minute: int,
-        ipstack_api_key: str,
+        zip: str,
         openweather_api_key: str
     ):
         self._mainWindow = MainWindow.get()
@@ -30,12 +28,7 @@ class WeatherJob(TextJob):
         super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, x, y)
 
         self._openweatherClient = OpenweatherClient(openweather_api_key)
-        
-        ipstack      = IpStackClient(ipstack_api_key)
-        response     = ipstack.execute(CheckRequest())
-        responseData = json.loads(response.content)
-
-        self._zip = responseData['zip']
+        self._zip               = zip
 
     async def start(self) -> None:
         self._isRunning = True

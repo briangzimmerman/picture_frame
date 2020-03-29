@@ -2,8 +2,6 @@ unsplash_api_key: &unsplash_api_key ""
 
 cta_train_api_key: &cta_train_api_key ""
 
-ipstack_api_key: &ipstack_api_key ""
-
 openweather_api_key: &openweather_api_key ""
 
 jobs:
@@ -51,6 +49,6 @@ jobs:
         'start_minute': 30,
         'end_hour': 8,
         'end_minute': 30,
-        'ipstack_api_key': *ipstack_api_key,
+        'zip': '', # must fill this in
         'openweather_api_key': *openweather_api_key
       }
