@@ -44,6 +44,7 @@ class WeatherJob(TextJob):
             self._lastRun = datetime.now()
 
         self._destroy()
+        self._mainWindow.update()
 
         self._isRunning = False
             

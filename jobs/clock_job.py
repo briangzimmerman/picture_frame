@@ -25,5 +25,6 @@ class ClockJob(TextJob):
             await asyncio.sleep(1)
 
         self._destroy()
+        self._mainWindow.update()
 
         self._isRunning = False
