@@ -16,7 +16,15 @@ jobs:
         'end_minute': 59,
         'unplash_api_key': *unsplash_api_key,
         'orientation': 'landscape',
-        'unsplash_collections': ['9387510', '9555007', '1336169', '5057079'] # leave as empty list if none
+        'unsplash_collections': [
+          '9387510',
+          '9555007',
+          '1336169',
+          '5057079',
+          '1198107',
+          '252265',
+          '993190'
+        ] # leave as empty list if none
       }
   - class_info:
       module: 'jobs.clock_job'
