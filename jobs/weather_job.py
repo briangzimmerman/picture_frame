@@ -7,6 +7,7 @@ from datetime import datetime
 
 import json
 import asyncio
+import tkinter as tk
 
 class WeatherJob(TextJob):
     JOB_REPEAT_INTERVAL = 1800
@@ -22,10 +23,8 @@ class WeatherJob(TextJob):
         openweather_api_key: str
     ):
         self._mainWindow = MainWindow.get()
-        x                = 60
-        y                = self._mainWindow.winfo_screenheight() - 30
 
-        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, x, y)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.SW, 25, 25)
 
         self._openweatherClient = OpenweatherClient(openweather_api_key)
         self._zip               = zip
