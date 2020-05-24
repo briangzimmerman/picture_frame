@@ -11,7 +11,7 @@ class ClockJob(TextJob):
     def __init__(self, days_to_run: List[int], start_hour: int, start_minute: int, end_hour: int, end_minute: int):
         self._mainWindow = MainWindow.get()
 
-        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.SE, 25, 25)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.SE, 25, 15)
 
     async def start(self) -> None:
         self._isRunning = True

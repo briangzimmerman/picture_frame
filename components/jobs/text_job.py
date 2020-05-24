@@ -5,10 +5,11 @@ from gui.main_window import MainWindow
 import tkinter as tk
 
 class TextJob(Job):
-    FONT         = 'calibri'
-    FONT_SIZE    = 40
-    TEXT_COLOR   = 'white'
-    STROKE_COLOR = 'black'
+    FONT             = 'Roboto'
+    FONT_SIZE        = 35
+    TEXT_COLOR       = 'white'
+    STROKE_COLOR     = 'black'
+    STROKE_THICKNESS = 1
 
     def __init__(
         self,
@@ -84,10 +85,10 @@ class TextJob(Job):
         (x, y) = self.__getTextNWCoords()
 
         self._mainWindow.canvas.coords(self.__getText(), x, y)
-        self._mainWindow.canvas.coords(self.__getStroke()[0], x - 2, y)
-        self._mainWindow.canvas.coords(self.__getStroke()[1], x, y - 2)
-        self._mainWindow.canvas.coords(self.__getStroke()[2], x + 2, y)
-        self._mainWindow.canvas.coords(self.__getStroke()[3], x, y + 2)
+        self._mainWindow.canvas.coords(self.__getStroke()[0], x - self.STROKE_THICKNESS, y)
+        self._mainWindow.canvas.coords(self.__getStroke()[1], x, y - self.STROKE_THICKNESS)
+        self._mainWindow.canvas.coords(self.__getStroke()[2], x + self.STROKE_THICKNESS, y)
+        self._mainWindow.canvas.coords(self.__getStroke()[3], x, y + self.STROKE_THICKNESS)
 
     def __getTextNWCoords(self) -> Tuple[int]:
         if self._anchor == tk.NW:

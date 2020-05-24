@@ -24,7 +24,7 @@ class CtaTrainArrival(TextJob):
         stop_id: int
     ):
         self._mainWindow = MainWindow.get()
-        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.NE, 25, 25)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.NE, 25, 15)
 
         self._ctaTrainClient = CtaTrainClient(cta_train_api_key)
         self._stop_id        = stop_id

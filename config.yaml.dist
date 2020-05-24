@@ -46,7 +46,7 @@ jobs:
         'end_hour': 8,
         'end_minute': 30,
         'cta_train_api_key': *cta_train_api_key,
-        'stop_id': 30017
+        'stop_id': 30017 # Set this to the right station/direction
       }
   - class_info:
       module: 'jobs.weather_job'

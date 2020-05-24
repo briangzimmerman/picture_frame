@@ -24,7 +24,7 @@ class WeatherJob(TextJob):
     ):
         self._mainWindow = MainWindow.get()
 
-        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.SW, 25, 25)
+        super().__init__(days_to_run, start_hour, start_minute, end_hour, end_minute, self._mainWindow, tk.SW, 25, 15)
 
         self._openweatherClient = OpenweatherClient(openweather_api_key)
         self._zip               = zip
