@@ -6,7 +6,7 @@ import tkinter as tk
 
 class TextJob(Job):
     FONT             = 'Roboto'
-    FONT_SIZE        = 35
+    FONT_SIZE        = 38
     TEXT_COLOR       = 'white'
     STROKE_COLOR     = 'black'
     STROKE_THICKNESS = 1
