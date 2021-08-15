@@ -37,8 +37,11 @@ class WeatherJob(TextJob):
                 await asyncio.sleep(self.JOB_PING_INTERVAL)
                 continue
 
-            self._setText(str(self._getTemperature()) + '\u00b0')
-            self._mainWindow.update()
+            try:
+                self._setText(str(self._getTemperature()) + '\u00b0')
+                self._mainWindow.update()
+            except requests.exceptions.RequestException as e:
+                pass
 
             self._lastRun = datetime.now()
 

@@ -48,7 +48,11 @@ class CtaTrainArrival(TextJob):
         self._isRunning = False
 
     def _getArrivalsMinutes(self) -> str:
-        response     = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id, 2))
+        try:
+            response = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id, 2))
+        except requests.exceptions.RequestException as e:
+            return 'unknown'
+
         responseData = json.loads(response.content)
 
         firstTrainArrivesAt  = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
