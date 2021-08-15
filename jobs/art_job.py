@@ -44,16 +44,19 @@ class ArtJob(Job):
                 await asyncio.sleep(self.JOB_PING_INTERVAL)
                 continue
 
-            self._setImage(self._getPhoto(self._getArtUrl()))
-            self._mainWindow.update()
-            self._lastRun = datetime.now()
+            try:
+                self._setImage(self._getPhoto(self._getArtUrl()))
+                self._mainWindow.update()
+                self._lastRun = datetime.now()
+            except requests.exceptions.RequestException as e:
+                print ("Error displaying new picture:", e)
+
 
         self._destroy()
         self._mainWindow.update()
 
         self._isRunning = False
 
-    # TODO handle error
     def _getArtUrl(self) -> str:
         response     = self._unsplashClient.execute(RandomRequest(False, self._orientation, 1, collections=self._collections))
         responseData = json.loads(response.content)
