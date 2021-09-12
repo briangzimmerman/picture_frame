@@ -4,6 +4,7 @@ from components.apis.openweather.weather_request import WeatherRequest
 from gui.main_window import MainWindow
 from typing import List
 from datetime import datetime
+from requests.exceptions import RequestException
 
 import json
 import asyncio
@@ -40,7 +41,7 @@ class WeatherJob(TextJob):
             try:
                 self._setText(str(self._getTemperature()) + '\u00b0')
                 self._mainWindow.update()
-            except requests.exceptions.RequestException as e:
+            except RequestException as e:
                 pass
 
             self._lastRun = datetime.now()

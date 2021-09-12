@@ -12,6 +12,7 @@ from PIL import Image, ImageTk, ImageOps
 from io import BytesIO
 from typing import List
 from datetime import datetime
+from requests.exceptions import RequestException
 
 class ArtJob(Job):
     JOB_REPEAT_INTERVAL = 3600 # 1 hour
@@ -48,7 +49,7 @@ class ArtJob(Job):
                 self._setImage(self._getPhoto(self._getArtUrl()))
                 self._mainWindow.update()
                 self._lastRun = datetime.now()
-            except requests.exceptions.RequestException as e:
+            except RequestException as e:
                 print ("Error displaying new picture:", e)
 
 
