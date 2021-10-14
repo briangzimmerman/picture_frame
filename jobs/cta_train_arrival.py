@@ -56,16 +56,19 @@ class CtaTrainArrival(TextJob):
 
         responseData = json.loads(response.content)
 
-        firstTrainArrivesAt  = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
-        secondTrainArrivesAt = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
-
-        now                    = datetime.now()
-        secondsTillFirstTrain  = (firstTrainArrivesAt - now).total_seconds()
-        secondsTillSecondTrain = (secondTrainArrivesAt - now).total_seconds()
-
+        now                   = datetime.now()
+        firstTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
+        secondsTillFirstTrain = (firstTrainArrivesAt - now).total_seconds()
         minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
-        if not minutesTillFirstTrain: minutesTillFirstTrain = '<1'
 
+        if not minutesTillFirstTrain:
+            minutesTillFirstTrain = '<1'
+
+        if not responseData['ctatt']['eta'][1]['arrT']:
+            return str(minutesTillFirstTrain)
+
+        secondTrainArrivesAt = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
+        secondsTillSecondTrain = (secondTrainArrivesAt - now).total_seconds()
         minutesTillSecondTrain = round(secondsTillSecondTrain / 60)
 
         return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
