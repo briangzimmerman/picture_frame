@@ -64,7 +64,7 @@ class CtaTrainArrival(TextJob):
         if not minutesTillFirstTrain:
             minutesTillFirstTrain = '<1'
 
-        if not responseData['ctatt']['eta'][1]['arrT']:
+        if not responseData['ctatt']['eta'][1] or not responseData['ctatt']['eta'][1]['arrT']:
             return str(minutesTillFirstTrain)
 
         secondTrainArrivesAt = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
