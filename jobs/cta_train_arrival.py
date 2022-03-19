@@ -56,6 +56,9 @@ class CtaTrainArrival(TextJob):
 
         responseData = json.loads(response.content)
 
+        if not responseData['ctatt']['eta'][0]:
+            return 'unknown'
+
         now                   = datetime.now()
         firstTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
         secondsTillFirstTrain = (firstTrainArrivesAt - now).total_seconds()
