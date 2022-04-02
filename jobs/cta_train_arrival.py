@@ -58,7 +58,7 @@ class CtaTrainArrival(TextJob):
         except Exception as inst:
             print(inst)
             if 'response' in locals():
-                print(response)
+                print(response.content)
 
             return 'Unknown' 
 
@@ -74,6 +74,6 @@ class CtaTrainArrival(TextJob):
         except Exception as inst:
             print(inst)
             if 'response' in locals():
-                print(response)
+                print(response.content)
 
             return str(minutesTillFirstTrain)
