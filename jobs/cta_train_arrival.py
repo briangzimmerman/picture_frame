@@ -60,7 +60,7 @@ class CtaTrainArrival(TextJob):
             if 'response' in locals():
                 print(response.content)
 
-            return 'Unknown' 
+            return 'unknown' 
 
         if not minutesTillFirstTrain:
             minutesTillFirstTrain = '<1'
