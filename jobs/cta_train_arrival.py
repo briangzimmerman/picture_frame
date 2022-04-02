@@ -50,28 +50,23 @@ class CtaTrainArrival(TextJob):
 
     def _getArrivalsMinutes(self) -> str:
         try:
-            response = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id, 2))
-        except RequestException as e:
-            return 'unknown'
-
-        responseData = json.loads(response.content)
-
-        if not responseData['ctatt']['eta'][0]:
-            return 'unknown'
-
-        now                   = datetime.now()
-        firstTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
-        secondsTillFirstTrain = (firstTrainArrivesAt - now).total_seconds()
-        minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
+            response              = self._ctaTrainClient.execute(ArrivalRequest(self._stop_id, 2))
+            responseData          = json.loads(response.content)
+            now                   = datetime.now()
+            firstTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
+            secondsTillFirstTrain = (firstTrainArrivesAt - now).total_seconds()
+            minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
+        except:
+            return 'Unknown' 
 
         if not minutesTillFirstTrain:
             minutesTillFirstTrain = '<1'
 
-        if not responseData['ctatt']['eta'][1] or not responseData['ctatt']['eta'][1]['arrT']:
+        try:
+            secondTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
+            secondsTillSecondTrain = (secondTrainArrivesAt - now).total_seconds()
+            minutesTillSecondTrain = round(secondsTillSecondTrain / 60)
+
+            return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
+        except:
             return str(minutesTillFirstTrain)
-
-        secondTrainArrivesAt = datetime.strptime(responseData['ctatt']['eta'][1]['arrT'], self.TIME_FORMAT)
-        secondsTillSecondTrain = (secondTrainArrivesAt - now).total_seconds()
-        minutesTillSecondTrain = round(secondsTillSecondTrain / 60)
-
-        return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
