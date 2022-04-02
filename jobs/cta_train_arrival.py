@@ -57,6 +57,8 @@ class CtaTrainArrival(TextJob):
             minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
         except Exception as inst:
             print(inst)
+            if 'response' in locals():
+                print(response)
 
             return 'Unknown' 
 
@@ -71,5 +73,7 @@ class CtaTrainArrival(TextJob):
             return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
         except Exception as inst:
             print(inst)
+            if 'response' in locals():
+                print(response)
 
             return str(minutesTillFirstTrain)
