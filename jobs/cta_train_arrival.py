@@ -8,7 +8,6 @@ from components.jobs.text_job import TextJob
 from gui.main_window import MainWindow
 from datetime import datetime
 from typing import List
-from requests.exceptions import RequestException
 
 class CtaTrainArrival(TextJob):
     JOB_REPEAT_INTERVAL = 60
@@ -56,7 +55,9 @@ class CtaTrainArrival(TextJob):
             firstTrainArrivesAt   = datetime.strptime(responseData['ctatt']['eta'][0]['arrT'], self.TIME_FORMAT)
             secondsTillFirstTrain = (firstTrainArrivesAt - now).total_seconds()
             minutesTillFirstTrain = round(secondsTillFirstTrain / 60)
-        except:
+        except Exception as inst:
+            print(inst)
+
             return 'Unknown' 
 
         if not minutesTillFirstTrain:
@@ -68,5 +69,7 @@ class CtaTrainArrival(TextJob):
             minutesTillSecondTrain = round(secondsTillSecondTrain / 60)
 
             return str(minutesTillFirstTrain) + ' & ' + str(minutesTillSecondTrain)
-        except:
+        except Exception as inst:
+            print(inst)
+
             return str(minutesTillFirstTrain)
